@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 
 from app.db import get_session
 from app.models import Author, Book
-from app.schemas import AuthorCreate, AuthorOut, BookCreate, BookOut
+from app.schemas import AuthorCreate, AuthorOut, AuthorUpdate, BookCreate, BookOut
 
 router = APIRouter(prefix="/orm", tags=["ORM simple"])
 
@@ -22,6 +22,26 @@ def create_author(
 ) -> AuthorOut:
     author = Author(name=payload.name)
     session.add(author)
+    session.commit()
+    session.refresh(author)
+    return author
+
+
+@router.patch("/authors/{author_id}", response_model=AuthorOut)
+def update_author(
+    author_id: int,
+    payload: AuthorUpdate,
+    session: Session = Depends(get_session),
+) -> AuthorOut:
+    author = session.get(Author, author_id)
+    if not author:
+        raise HTTPException(status_code=404, detail="Author not found")
+
+    # model_dump(exclude_unset=True) retourne uniquement les champs envoyés dans le body
+    # Si le client envoie {} (body vide), rien n'est modifié
+    for field, value in payload.model_dump(exclude_unset=True).items():
+        setattr(author, field, value)
+
     session.commit()
     session.refresh(author)
     return author
