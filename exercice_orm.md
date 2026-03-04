@@ -134,6 +134,13 @@ Retourner un objet JSON avec :
 
 ---
 
+## Validation avec PgAdmin
+
+- Créez un fichier `validation.sql` avec des requêtes SQL pour vérifier que les données sont correctement insérées, mises à jour et supprimées dans la base de données
+- Exécutez ces requêtes dans PgAdmin pour valider les opérations effectuées par votre API
+- Contrôler que les jointures fonctionnent correctement en vérifiant les données retournées par les endpoints qui utilisent des jointures
+- Contrôler les valeurs des statistiques retournées par les endpoints de statistiques
+
 ## Checklist de validation
 
 - Les nouveaux endpoints apparaissent dans Swagger UI (`/docs`)

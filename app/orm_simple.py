@@ -33,6 +33,9 @@ def update_author(
     payload: AuthorUpdate,
     session: Session = Depends(get_session),
 ) -> AuthorOut:
+
+    # On récupère l'auteur à mettre à jour depuis la base de données
+    # get() est une méthode de Session qui permet de récupérer un objet par sa clé primaire (ici id)
     author = session.get(Author, author_id)
     if not author:
         raise HTTPException(status_code=404, detail="Author not found")

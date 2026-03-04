@@ -23,6 +23,11 @@ def list_books_with_authors(
         .join(Author)
         .order_by(Book.id)
     )
+
+    # On pourrait aussi utiliser mappings et ** pour éviter de répéter tous les champs de Book :
+    # rows = session.execute(stmt).mappings().all()
+    # return [BookWithAuthor(**row) for row in rows]
+
     rows = session.execute(stmt).all()
     return [
         BookWithAuthor(
@@ -33,6 +38,7 @@ def list_books_with_authors(
         )
         for row in rows
     ]
+
 
 
 @router.get("/books-with-author-object", response_model=list[BookWithAuthorObject])
@@ -67,6 +73,8 @@ def list_books_with_publisher(
         .join(Publisher, Book.publisher_id == Publisher.id, isouter=True)
         .order_by(Book.id)
     )
+
+    # Idem, on pourrait utiliser mappings et **
     rows = session.execute(stmt).all()
     return [
         BookWithPublisher(
