@@ -71,3 +71,42 @@ Une requete invalide renvoie une erreur 422 visible dans Swagger UI.
 - Voir la difference entre SQL brut et ORM
 - Comprendre comment une jointure ORM se traduit en JSON
 - Utiliser des schemas pour valider les donnees
+
+## MLD
+```mermaid
+erDiagram
+    PUBLISHERS {
+        int id PK
+        string name "unique, varchar(150)"
+    }
+
+    AUTHORS {
+        int id PK
+        string name "unique, varchar(100)"
+    }
+
+    BOOKS {
+        int id PK
+        string title "varchar(200)"
+        int pages
+        int author_id FK
+        int publisher_id FK "nullable"
+    }
+
+    TAGS {
+        int id PK
+        string name "unique, varchar(50)"
+    }
+
+    BOOK_TAGS {
+        int book_id PK, FK
+        int tag_id  PK, FK
+        date tagged_at
+    }
+
+    AUTHORS ||--o{ BOOKS : "author_id"
+    PUBLISHERS ||--o{ BOOKS : "publisher_id (optional)"
+
+    BOOKS ||--o{ BOOK_TAGS : "book_id"
+    TAGS  ||--o{ BOOK_TAGS : "tag_id"
+```
